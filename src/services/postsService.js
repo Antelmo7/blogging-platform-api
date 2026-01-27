@@ -15,13 +15,17 @@ export async function createPost({
   content,
   category
 }) {
-  const text = 'INSERT INTO posts(title, content, category) VALUES ($1, $2, $3) RETURNING *';
-  const values = [title, content, category];
+  try {
+    const text = 'INSERT INTO posts(title, content, category) VALUES ($1, $2, $3) RETURNING *';
+    const values = [title, content, category];
 
-  const res = await client.query(text, values);
-  const data = res.rows;
+    const res = await client.query(text, values);
+    const data = res.rows;
 
-  return data[0];
+    return data[0];
+  } catch (error) {
+    throw new Error('Error saving post');
+  }
 }
 
 export async function updatePost({
@@ -30,51 +34,65 @@ export async function updatePost({
   content,
   category
 }) {
-  const text = 'UPDATE posts SET title = $2, content = $3, category=$4 WHERE post_id = $1 RETURNING *';
-  const values = [id, title, content, category];
+  try {
+    const text = 'UPDATE posts SET title = $2, content = $3, category=$4 WHERE post_id = $1 RETURNING *';
+    const values = [id, title, content, category];
 
-  const res = await client.query(text, values);
-  const data = res.rows;
+    const res = await client.query(text, values);
+    const data = res.rows;
 
-  return data[0];
+    return data[0];
+  } catch (error) {
+    throw new Error('Error updating post');
+  }
 }
 
 export async function deletePost({
   id,
 }) {
-  const text = 'DELETE FROM posts WHERE post_id = $1';
-  const values = [id];
+  try {
+    const text = 'DELETE FROM posts WHERE post_id = $1';
+    const values = [id];
 
-  const res = await client.query(text, values);
-
-  return true;
+    await client.query(text, values);
+  } catch (error) {
+    throw new Error('Error deleting post');
+  }
 }
 
 export async function getPostById({
   id,
 }) {
-  const text = 'SELECT * FROM posts WHERE post_id = $1';
-  const values = [id];
-
-  const res = await client.query(text, values);
-  const data = res.rows;
-
-  return data[0];
-}
-
-export async function getPosts({ term = null }) {
-  if (term) {
-    const text = 'SELECT * FROM posts WHERE title ILIKE $1 OR content ILIKE $1 OR category ILIKE $1';
-    const values = [`%${term}%`];
+  try {
+    const text = 'SELECT * FROM posts WHERE post_id = $1';
+    const values = [id];
 
     const res = await client.query(text, values);
     const data = res.rows;
 
-    return data;
-  } else {
-    const res = await client.query('SELECT * FROM posts');
-    const data = res.rows;
+    return data[0];
+  } catch (error) {
+    throw new Error('Error fetching post');
+  }
+}
 
-    return data;
+export async function getPosts({ term = null }) {
+  try {
+    if (term) {
+      const text = 'SELECT * FROM posts WHERE title ILIKE $1 OR content ILIKE $1 OR category ILIKE $1';
+      const values = [`%${term}%`];
+
+      const res = await client.query(text, values);
+      const data = res.rows;
+
+      return data;
+    } else {
+      const res = await client.query('SELECT * FROM posts');
+      const data = res.rows;
+
+      return data;
+    }
+  } catch (error) {
+    throw new Error('Error fetching posts');
   }
 }
