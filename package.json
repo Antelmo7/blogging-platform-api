@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "express": "^5.2.1",
-    "express-rate-limit": "^8.2.1"
-  },
-  "devDependencies": {}
+    "express-rate-limit": "^8.2.1",
+    "pg": "^8.17.2"
+  }
 }
