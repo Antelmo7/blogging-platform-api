@@ -77,4 +77,7 @@ const values = [`%${term}%`];
 const res = await client.query(text, values);
 ```
 **Tags array**
+
 ...coming soon XD
+
+Solution for the [Blogging Platform API](https://roadmap.sh/projects/blogging-platform-api) fom [roadmap.sh](https://roadmap.sh)
