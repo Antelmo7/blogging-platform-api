@@ -13,11 +13,12 @@ await client.connect();
 export async function createPost({
   title,
   content,
-  category
+  category,
+  tags
 }) {
   try {
-    const text = 'INSERT INTO posts(title, content, category) VALUES ($1, $2, $3) RETURNING *';
-    const values = [title, content, category];
+    const text = 'INSERT INTO posts(title, content, category, tags) VALUES ($1, $2, $3, $4) RETURNING *';
+    const values = [title, content, category, JSON.stringify(tags)];
 
     const res = await client.query(text, values);
     const data = res.rows;
@@ -32,11 +33,12 @@ export async function updatePost({
   id,
   title,
   content,
-  category
+  category,
+  tags
 }) {
   try {
-    const text = 'UPDATE posts SET title = $2, content = $3, category=$4 WHERE post_id = $1 RETURNING *';
-    const values = [id, title, content, category];
+    const text = 'UPDATE posts SET title = $2, content = $3, category=$4, tags=$5 WHERE post_id = $1 RETURNING *';
+    const values = [id, title, content, category, JSON.stringify(tags)];
 
     const res = await client.query(text, values);
     const data = res.rows;

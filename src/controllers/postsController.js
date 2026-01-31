@@ -6,7 +6,8 @@ export async function createPost(req, res) {
     const post = await postsService.createPost({
       title,
       content,
-      category
+      category,
+      tags
     });
 
     res.status(201).json(post);
@@ -23,7 +24,8 @@ export async function updatePost(req, res) {
       id,
       title,
       content,
-      category
+      category,
+      tags
     });
 
     res.status(200).json(post);

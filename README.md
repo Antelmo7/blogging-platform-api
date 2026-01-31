@@ -61,11 +61,13 @@ await client.connect();
 
 To execute queries pg use something called **paramethized query** instead of concatening parameters into the query text directly because this can lead to sql injections.
 
-```javascript
-const text = 'INSERT INTO posts(title, content, category) VALUES ($1, $2, $3) RETURNING *';
-const values = [title, content, category];
+`RETURNING *` will return the new post.
 
-const res = await client.query(text, values);
+```javascript
+const text = 'INSERT INTO posts(title, content, category, tags) VALUES ($1, $2, $3, $4) RETURNING *';
+    const values = [title, content, category, JSON.stringify(tags)];
+
+    const res = await client.query(text, values);
 ```
 
 To search a term ignoring lower or uppercase you can use `ILIKE` from pg
@@ -78,6 +80,6 @@ const res = await client.query(text, values);
 ```
 **Tags array**
 
-...coming soon XD
+To save the Array of tags I used a JSON column in PostgreSQL and sending the array using `JSON.stringify(tags)` to save it, the database will return it like an object.
 
 Solution for the [Blogging Platform API](https://roadmap.sh/projects/blogging-platform-api) fom [roadmap.sh](https://roadmap.sh)
