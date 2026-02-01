@@ -65,9 +65,9 @@ To execute queries pg use something called **paramethized query** instead of con
 
 ```javascript
 const text = 'INSERT INTO posts(title, content, category, tags) VALUES ($1, $2, $3, $4) RETURNING *';
-    const values = [title, content, category, JSON.stringify(tags)];
+const values = [title, content, category, JSON.stringify(tags)];
 
-    const res = await client.query(text, values);
+const res = await client.query(text, values);
 ```
 
 To search a term ignoring lower or uppercase you can use `ILIKE` from pg
@@ -80,7 +80,7 @@ const res = await client.query(text, values);
 ```
 **Tags array**
 
-To save the Array of tags I used a JSON column in PostgreSQL and sending the array using `JSON.stringify(tags)` to save it, the database will return it like an object.
+To save the Array of tags I used a JSON column in PostgreSQL and sending the array using `JSON.stringify(tags)` to save it, the database will return it like an array.
 
 **Validating properties**
 
