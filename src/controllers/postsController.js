@@ -1,8 +1,19 @@
 import * as postsService from '../services/postsService.js';
+import validatePost from '../utils/validatePost.js';
 
 export async function createPost(req, res) {
   try {
-    const { title, content, category, tags } = req.body;
+    const { title, content, category, tags } = req.body
+
+    if (!validatePost({
+      title,
+      content,
+      category,
+      tags
+    })) {
+      return res.status(400).json({ message: 'Fields missing' });
+    }
+
     const post = await postsService.createPost({
       title,
       content,
@@ -20,6 +31,16 @@ export async function updatePost(req, res) {
   try {
     const { id } = req.params;
     const { title, content, category, tags } = req.body;
+
+    if (!validatePost({
+      title,
+      content,
+      category,
+      tags
+    })) {
+      return res.status(400).json({ message: 'Fields missing' });
+    }
+
     const post = await postsService.updatePost({
       id,
       title,
