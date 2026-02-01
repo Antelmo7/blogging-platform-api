@@ -43,7 +43,7 @@ The term query param will search on title, content and category
 
 ## Explanation
 **PostgreSQL**
-To connect to PG Datbase install pg client with `npm install pg`, then create a new client and use the env variables to connet to the database.
+To connect to PG Database install pg client with `npm install pg`, then create a new client and use the env variables to connect to the database.
 
 ```javascript
 import { Client } from "pg";
@@ -81,5 +81,37 @@ const res = await client.query(text, values);
 **Tags array**
 
 To save the Array of tags I used a JSON column in PostgreSQL and sending the array using `JSON.stringify(tags)` to save it, the database will return it like an object.
+
+**Validating properties**
+
+To validate a post we have to check each prop
+- No null
+- No undefined
+- No empty strings
+- And no empty arrays
+
+```javascript
+export default function validatePost(post) {
+  if (!post) return false;
+
+  const props = ['title', 'content', 'category', 'tags'];
+
+  return props.every(prop => {
+    const value = post[prop];
+
+    if (!(prop in post)) return false;
+
+    if (value === null || value === undefined) return false;
+
+    // empty strings
+    if (typeof value === 'string' && value.trim() === '') return false;
+
+    // tags array
+    if (prop === 'tags' && (!Array.isArray(value) || value.length === 0)) return false;
+
+    return true;
+  });
+}
+```
 
 Solution for the [Blogging Platform API](https://roadmap.sh/projects/blogging-platform-api) fom [roadmap.sh](https://roadmap.sh)
